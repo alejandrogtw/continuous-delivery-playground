@@ -38,3 +38,21 @@ jobs:
         with:
           name: modern-web-app-v${{ github.sha }}
           path: modern-web-app/.next/
+
+  Deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: Download build artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: modern-web-app-${{ github.sha }}
+          path: artifact_to_deploy
+      - name: Deploy
+        run: |
+          set -ev
+          cd modern-web-app
+          npm run deploy
